@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import * as auth from '../utils/auth';
-import InfoTooltip from "./InfoTooltip";
 
 function Register ({ onRegister}) {
   const [email, setEmail] = useState('');
