@@ -1,70 +1,48 @@
-# Getting Started with Create React App
+# Проект: Mesto
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Интерактивный сервер Mesto, куда можно добавлять и удалять фотографии, ставить лайки. 
 
-## Available Scripts
+## Что это?
 
-In the project directory, you can run:
+Одностраничный сайт, написанный на React. Сайт позволяет пользователям регистрироваться, редактировать свой профиль, добавлять фотографии, лайкать их и удалять.
+На данном этапе реализованы подгрузка изображений с сервера, возможность открывать и закрывать карточки.
 
-### `npm start`
+##  Использованные технологии
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### React
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Сайт создан на React.
 
-### `npm test`
+### Регистрация пользователя
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Для доступа к функционалу сайта пользователь должен зарегестрироваться и затем войти в систему. После входа пользователь может выйти и затйти/зарегестрировать снова.
 
-### `npm run build`
+###  Добавление карточек
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+После регистрации пользовател  может загружать свои изображения, ставить лайки карточкам и удалять их.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Адаптивная верстка
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Сайт адаптирован под экраны популярных девайсов, начиная малыми мобильными устройствами и заканчивая большими дэсктопными экранами. 
+Ширина многих элементов задана функцией calc(). Из ширины страницы вычитаются внешние отступы, заставляя ширину элементов адаптироваться под размер экрана:
 
-### `npm run eject`
+```css
+@media screen and (max-width: 1023px) {
+  .elements__container {
+    width: calc(100% - (19px*2));
+  }
+}
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Grid-Layout
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Секция с карточками создана на Grid Layout. 
+Расположение и размер элементов в сетке адаптируются под экран пользователя.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Увеличение изображения
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+При клике на любое изображение из карточки оно всплывает в новом окне.
 
-## Learn More
+## Посмотреть проект
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+[Нажми меня](https://margof94.github.io/mesto/src/index.html)
