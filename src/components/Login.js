@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import * as auth from '../utils/auth';
 
-function Login ({handleLogin}) {
+function Login ({onLogin}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   function handleEmailChange(e) {
@@ -15,20 +15,18 @@ function Login ({handleLogin}) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (!email || !password) {
-      return
-    }
-    auth.authorize(email, password)
-      .then((data) => {
-        if(!data.token) {
-          return
-        }
-        
-        setEmail('');
-        setPassword('');
-        handleLogin(data.token);
-      })
-      .catch(err => console.log(err));
+    onLogin(email, password);
+    // if (!email || !password) {
+    //   return
+    // }
+    // auth.authorize(email, password)
+    //   .then((data) => {
+    //     if(!data.token) {
+    //       return
+    //     }
+    //     handleLogin(data.token, email);
+    //   })
+    //   .catch(err => console.log(err));
   };
 
   return (
@@ -76,4 +74,4 @@ function Login ({handleLogin}) {
   )
 }
 
-export default withRouter(Login);
+export default Login;

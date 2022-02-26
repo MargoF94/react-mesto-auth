@@ -23,7 +23,7 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isInfoPopupOpen, setIsInfoPopupOpen] = useState(false);
-  const [selectedCard, setIsSelectedCard] = useState({});
+  const [selectedCard, setSelectedCard] = useState({});
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -43,14 +43,14 @@ function App() {
     setIsAddPlacePopupOpen(true);
   };
   function handleCardClick(card) {
-    setIsSelectedCard(card);
+    setSelectedCard(card);
   };
 
   function closeAllPopups() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
-    setIsSelectedCard({});
+    setSelectedCard({});
   }
   function handleLikeClick(card) {
     // проверяем, есть ли уже лайк на этой карточке
@@ -96,13 +96,27 @@ function App() {
       });
   }
 
-  function handleLogin(token) {
-    if (!token) {
-      return
-    }
-    localStorage.setItem('token', token);
+  function handleLogin(email) {
     setIsLoggedIn(true);
-    history.push('/');
+    setUserData({
+      email: email
+    })
+  }
+
+  function handleLoginSubmit(email, password) {
+    if (!email || !password) {
+      return;
+    }
+    auth.authorize(email, password)
+      .then((data) => {
+        if(!data.token) {
+          return
+        }
+        localStorage.setItem('token', data.token);
+        handleLogin(email);
+        history.push('/');
+      })
+      .catch(err => console.log(err));
   }
 
   function handleLogout() {
@@ -137,9 +151,51 @@ function App() {
     })
   }
 
-  function tokenCheck() {
-    if (localStorage.getItem('token')) {
-      const token = localStorage.getItem('token');
+  function handleCloseInfoTooltip (isSuccess) {
+    if(isSuccess) {
+      history.push('/');
+    }
+    setIsInfoPopupOpen(false);
+  }
+
+  // запрашиваем первоначальные карточки и информацию о пользователе
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      Promise.all([
+        api.getUserData(),
+        api.getInitialCards()
+      ])
+      .then(([user, cards]) => {
+        setCurrentUser(user);
+        setCards(cards)
+      })
+      .catch(err => console.log(err))
+    }
+  }, [isLoggedIn]);
+
+  // useEffect(() => {
+  //   api.getUserData()
+  //     .then((data) => {
+  //       setCurrentUser(data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+
+  //     api.getInitialCards()
+  //     .then((data) => {
+  //       setCards(data)
+  //     })
+  //     .catch((err) => {
+  //       console.log(err)
+  //     })
+  // }, []);
+  
+  // проверяет, авторизирован ли пользователь через проверку токена
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
       auth.getContent(token).then((res) => {
         if (res) {
           setUserData({
@@ -148,44 +204,12 @@ function App() {
           })
           setIsLoggedIn(true);
           history.push('/')
+        } else {
+          localStorage.removeItem('token');
         }
       })
+      .catch(err => console.log(err));
     }
-  }
-
-  function handleCloseInfoTooltip (isSuccess) {
-    if(isSuccess) {
-      history.push('/');
-    } else {
-      history.push('/sign-up');
-    }
-
-    setIsInfoPopupOpen(false);
-  }
-
-  // запрашиваем первоначальные карточки и информацию о пользователе
-
-  useEffect(() => {
-    api.getUserData()
-      .then((data) => {
-        setCurrentUser(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-      api.getInitialCards()
-      .then((data) => {
-        setCards(data)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }, []);
-  
-  // проверяет, авторизирован ли пользователь
-  useEffect(() => {
-    tokenCheck();
   }, []);
 
   return (
@@ -211,17 +235,17 @@ function App() {
             />
           <Route path="/sign-in">
             <Login 
-              handleLogin={handleLogin}
+              onLogin={handleLoginSubmit}
             />
           </Route>
 
           <Route path="/sign-up">
             <Register
               onRegister={handleRegister} />
-          </Route>
-          <Route exact path="/">
-            {!isLoggedIn && <Redirect to="/sign-in" />}
           </Route> 
+          <Route path="*">
+              {isLoggedIn ? <Redirect to="/"/> : <Redirect to="/sign-in"/>}
+            </Route> 
         </Switch>
 
         {isLoggedIn && <Footer />}
