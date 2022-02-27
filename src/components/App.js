@@ -152,9 +152,9 @@ function App() {
   }
 
   function handleCloseInfoTooltip (isSuccess) {
-    if(isSuccess) {
-      history.push('/');
-    }
+    // if(isSuccess) {
+    //   history.push('/');
+    // }
     setIsInfoPopupOpen(false);
   }
 
@@ -202,7 +202,7 @@ function App() {
             email: res.data.email,
             id: res.data._id
           })
-          setIsLoggedIn(true);
+          setIsLoggedIn(true);  
           history.push('/')
         } else {
           localStorage.removeItem('token');
@@ -210,7 +210,7 @@ function App() {
       })
       .catch(err => console.log(err));
     }
-  }, []);
+  }, [history]);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
